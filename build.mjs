@@ -286,22 +286,54 @@ function page(site, repos, lang) {
     .map((l) => `<li><a href="${esc(l.href)}">${esc(l.label)}</a></li>`)
     .join("");
 
+  const base = site.meta.url.replace(/\/$/, "");
+  const canonical = lang === "ru" ? base + "/" : `${base}/index.en.html`;
+  const ogTitle = `${site.meta.brand} — ${hero.kicker}`;
+  const ogImage = new URL("og-image.png", base + "/").href;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: site.meta.brand,
+    url: canonical,
+    logo: ogImage,
+    email: site.meta.email,
+    location: { "@type": "Place", name: site.meta.location },
+    sameAs: (site.contact.links || [])
+      .filter((l) => l.href.startsWith("http"))
+      .map((l) => l.href),
+  };
+
   return `<!doctype html>
 <html lang="${t.htmlLang}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
-  <title>${esc(site.meta.brand)} - ${esc(hero.kicker)}</title>
+  <title>${esc(ogTitle)}</title>
   <meta name="description" content="${esc(hero.lead)}">
-  <link rel="canonical" href="${esc(site.meta.url)}">
+  <link rel="canonical" href="${esc(canonical)}">
+  <link rel="alternate" hreflang="ru" href="${esc(base + "/")}">
+  <link rel="alternate" hreflang="en" href="${esc(base + "/index.en.html")}">
+  <link rel="alternate" hreflang="x-default" href="${esc(base + "/")}">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preload" href="./styles.css" as="style">
   <link rel="stylesheet" href="./styles.css">
-  <meta property="og:title" content="${esc(site.meta.brand)}">
+  <meta property="og:site_name" content="${esc(site.meta.brand)}">
+  <meta property="og:title" content="${esc(ogTitle)}">
   <meta property="og:description" content="${esc(hero.lead)}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="${esc(site.meta.url)}">
+  <meta property="og:url" content="${esc(canonical)}">
+  <meta property="og:image" content="${esc(ogImage)}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="${lang === "ru" ? "ru_RU" : "en_US"}">
+  <meta property="og:locale:alternate" content="${lang === "ru" ? "en_US" : "ru_RU"}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${esc(ogTitle)}">
+  <meta name="twitter:description" content="${esc(hero.lead)}">
+  <meta name="twitter:image" content="${esc(ogImage)}">
+  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
 <body>
   <a class="skip" href="#work">${esc(t.navWork)}</a>
@@ -382,7 +414,37 @@ async function build() {
   writeFileSync(join(dist, "index.en.html"), page(site, repos, "en"));
   writeFileSync(join(dist, "styles.css"), readFileSync(join(root, "styles.css")));
   writeFileSync(join(dist, "favicon.svg"), readFileSync(join(root, "favicon.svg")));
+  writeFileSync(join(dist, "og-image.png"), readFileSync(join(root, "og-image.png")));
   writeFileSync(join(dist, "CNAME"), site.meta.domain + "\n");
+
+  const base = site.meta.url.replace(/\/$/, "");
+  const now = new Date().toISOString().slice(0, 10);
+  writeFileSync(
+    join(dist, "robots.txt"),
+    `User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap.xml\n`,
+  );
+  writeFileSync(
+    join(dist, "sitemap.xml"),
+    `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>${base}/</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="ru" href="${base}/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${base}/index.en.html"/>
+  </url>
+  <url>
+    <loc>${base}/index.en.html</loc>
+    <lastmod>${now}</lastmod>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="ru" href="${base}/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${base}/index.en.html"/>
+  </url>
+</urlset>
+`,
+  );
   console.log(`built ${repos.length} repositories, ${site.client.length} client cases → dist/`);
 }
 

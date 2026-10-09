@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="82%" cy="18%" r="60%">
+      <stop offset="0%" stop-color="#3a2f1c"/>
+      <stop offset="100%" stop-color="#171410"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <text x="96" y="170" font-family="Consolas, 'Cascadia Code', monospace" font-size="30" letter-spacing="6" fill="#e6b15a">TI2A.DEV</text>
+  <text x="92" y="330" font-family="Georgia, 'Times New Roman', serif" font-size="76" fill="#f2ede2">Инфраструктура для музыки</text>
+  <text x="92" y="420" font-family="Georgia, 'Times New Roman', serif" font-size="76" fill="#f2ede2">и инструменты,</text>
+  <text x="92" y="510" font-family="Georgia, 'Times New Roman', serif" font-size="76" fill="#f2ede2">на которых она держится.</text>
+  <text x="96" y="572" font-family="Consolas, monospace" font-size="24" letter-spacing="2" fill="#8a8378">01 — 08 / студия разработки</text>
+</svg>
