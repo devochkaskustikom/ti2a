@@ -1,0 +1,10 @@
+{
+  "name": "ti2a",
+  "private": true,
+  "type": "module",
+  "description": "Ti2A.dev — studio site. Client work and open source, built from one data file.",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs --watch"
+  }
+}

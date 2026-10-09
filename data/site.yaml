@@ -1,0 +1,156 @@
+# Ti2A.dev — the whole site lives in this file.
+#
+# Two sections, edited differently:
+#   client      hand-written case studies ("Под заказ")
+#   opensource  a curated list of public repositories; stars, language,
+#               description and the npm link are fetched from GitHub and the
+#               npm registry on every build. Only `repo` is required.
+#
+# Add a client project by copying a block. Add an open-source project by
+# adding its `owner/repo`. Then: npm run build
+#
+# Client projects need the client's permission before a name or screenshot
+# goes public. Until then, keep `client` off and describe the work without
+# identifying anyone.
+
+meta:
+  brand: Ti2A.dev
+  name: Ti2A.dev
+  url: https://devochkaskustikom.github.io/ti2a/
+  domain: ti2a.ru
+  lang_default: ru
+  email: hello@ti2a.ru
+  github: devochkaskustikom
+  location: Russian Federation
+
+# Where the open-source list is read from. `featured` limits the site to the
+# repos named below, in that order. Switch to `all` to show every public,
+# non-fork, non-archived repository instead.
+opensource:
+  source: featured
+
+hero:
+  ru:
+    kicker: студия разработки
+    title: "Инфраструктура для музыки и инструменты, на которых она держится."
+    lead: "Кабинеты дистрибьюторов, доставка релизов в DDEX, панели для артистов и лейблов. Коммерческие проекты остаются закрытыми — здесь только то, что можно показать."
+  en:
+    kicker: a development studio
+    title: "Music infrastructure, and the tools that keep it running."
+    lead: "Distributor cabinets, DDEX delivery, panels for artists and labels. Client work stays private — this page shows only what can be shown."
+
+about:
+  ru:
+    heading: Кто делает
+    body: "Ti2A.dev делает инфраструктуру музыкального дистрибьютора целиком: кабинет артиста и лейбла, модерацию релизов, сборку DDEX-пакетов и доставку на площадки. Инструменты, которые появились в этой работе и оказались полезны сами по себе, публикуются открыто."
+  en:
+    heading: Who
+    body: "Ti2A.dev builds a music distributor's infrastructure end to end: the artist and label cabinet, release moderation, DDEX packaging and delivery to the platforms. Tools that came out of that work and turned out to be useful on their own are published."
+
+# stack is display-only, shown under the about block
+stack:
+  - TypeScript
+  - JavaScript
+  - Node.js
+  - React
+  - NestJS
+  - AdonisJS
+  - MariaDB
+  - PostgreSQL
+  - DDEX ERN
+  - MCP
+
+contact:
+  ru:
+    heading: Написать
+    note: "Новый проект, доработка существующего или вопрос по открытому инструменту. Удобнее всего в Telegram, почта тоже доходит."
+  en:
+    heading: Contact
+    note: "A new build, a change to something that exists, or a question about an open tool. Telegram is the fastest way through; email works too."
+  links:
+    - label: Telegram
+      href: https://t.me/devochkaskustikom
+    - label: hello@ti2a.ru
+      href: mailto:hello@ti2a.ru
+    - label: GitHub
+      href: https://github.com/devochkaskustikom
+    - label: VK
+      href: https://vk.com/devochkaskustikom
+
+# ---------------------------------------------------------------------------
+# Под заказ. One block = one card. Nothing here is fetched.
+#
+#   id        stable slug, used as the anchor (#cabinet)
+#   title     card heading, same in both languages
+#   year      shown as-is, e.g. "2025–2026" or "2024"
+#   status    shipped | ongoing | paused
+#   client    client name, only with their permission; omit otherwise
+#   url       public link, omit if none
+#   image     path under assets/, e.g. "cabinet.png"; omit for a text card
+#   tags      short stack list
+#   ru / en   summary (one or two sentences) and result (what changed)
+# ---------------------------------------------------------------------------
+client:
+  - id: cabinet
+    title: Кабинет дистрибьютора
+    year: "2025–2026"
+    status: ongoing
+    tags: [NestJS, React, HeroUI, MariaDB, Redis, DDEX 3.8.2]
+    ru:
+      summary: "Закрытый кабинет для артистов и лейблов: загрузка релиза, модерация сотрудниками, доставка на площадки пакетами DDEX 3.8.2 по FTP."
+      result: "Релиз проходит draft → модерация → доставка → площадки. Отправка партнёру ставится в очередь только в момент перехода на доставку, а не раньше."
+    en:
+      summary: "A private cabinet for artists and labels: release upload, staff moderation, and delivery to stores as DDEX 3.8.2 packages over FTP."
+      result: "A release moves draft → moderation → delivery → live. The partner push is queued only at the moderation-to-delivery step, never before."
+
+  - id: moderation-api
+    title: Модерация релизов
+    year: "2026"
+    status: shipped
+    tags: [AdonisJS, NestJS, DDEX ERN 3.8.2]
+    ru:
+      summary: "Серверная часть модерации для дистрибьютора: очередь релизов, статусы и правила, по которым релиз можно принять или вернуть."
+      result: "Модератор видит одно состояние релиза и один следующий шаг. Документация сверяется с кодом, а не живёт отдельно от него."
+    en:
+      summary: "The moderation backend for a distributor: a release queue, statuses, and the rules for accepting or sending a release back."
+      result: "A moderator sees one state and one next step. The docs are checked against the code instead of drifting away from it."
+
+  - id: lyrics
+    title: Караоке-лирика
+    year: "2022–2026"
+    status: shipped
+    tags: [TTML, Apple Music, React, Vite]
+    ru:
+      summary: "Инструмент, который ставит текст песни на звук и отдаёт караоке-лирику в TTML для Apple Music и агрегаторов."
+      result: "Первая версия работала в проде с 2022 года. В 2026 переписана заново как открытый инструмент — она же лежит в разделе ниже."
+    en:
+      summary: "A tool that times lyrics to audio and exports karaoke TTML for Apple Music and aggregators."
+      result: "The first version ran in production from 2022. In 2026 it was rewritten as an open tool — the same one listed below."
+
+# ---------------------------------------------------------------------------
+# Open source. `repo` is the only required field.
+#
+# On build, GitHub supplies the description, language, stars, license and
+# last push; the npm registry supplies the version when a package exists.
+# Anything written here overrides the fetched value, so leave a field out
+# unless you want to word it yourself.
+#
+#   repo         owner/name
+#   npm          package name, if it should link to npmjs.com
+#   title        overrides the repo name
+#   description  overrides GitHub's description (one language — GitHub's own)
+#   site         a live demo or docs url
+# ---------------------------------------------------------------------------
+opensource_repos:
+  - repo: devochkaskustikom/ddex-ern-382-mcp
+    npm: ddex-ern-382-mcp
+
+  - repo: devochkaskustikom/aapanel-mcp
+    npm: aapanel-mcp
+
+  - repo: devochkaskustikom/release-flow-docs
+
+  - repo: devochkaskustikom/ttml-karaoke-generator
+    site: https://devochkaskustikom.github.io/ttml-karaoke-generator/
+
+  - repo: devochkaskustikom/antiCORS
