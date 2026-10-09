@@ -1,4 +1,4 @@
-# Ti2A.dev — the whole site lives in this file.
+# Ti2A.dev - the whole site lives in this file.
 #
 # Two sections, edited differently:
 #   client      hand-written case studies ("Под заказ")
@@ -33,11 +33,11 @@ hero:
   ru:
     kicker: студия разработки
     title: "Инфраструктура для музыки и инструменты, на которых она держится."
-    lead: "Кабинеты дистрибьюторов, доставка релизов в DDEX, панели для артистов и лейблов. Коммерческие проекты остаются закрытыми — здесь только то, что можно показать."
+    lead: "Кабинеты дистрибьюторов, доставка релизов в DDEX, панели для артистов и лейблов. Коммерческие проекты остаются закрытыми - здесь только то, что можно показать."
   en:
     kicker: a development studio
     title: "Music infrastructure, and the tools that keep it running."
-    lead: "Distributor cabinets, DDEX delivery, panels for artists and labels. Client work stays private — this page shows only what can be shown."
+    lead: "Distributor cabinets, DDEX delivery, panels for artists and labels. Client work stays private - this page shows only what can be shown."
 
 about:
   ru:
@@ -122,10 +122,10 @@ client:
     tags: [TTML, Apple Music, React, Vite]
     ru:
       summary: "Инструмент, который ставит текст песни на звук и отдаёт караоке-лирику в TTML для Apple Music и агрегаторов."
-      result: "Первая версия работала в проде с 2022 года. В 2026 переписана заново как открытый инструмент — она же лежит в разделе ниже."
+      result: "Первая версия работала в проде с 2022 года. В 2026 переписана заново как открытый инструмент - она же лежит в разделе ниже."
     en:
       summary: "A tool that times lyrics to audio and exports karaoke TTML for Apple Music and aggregators."
-      result: "The first version ran in production from 2022. In 2026 it was rewritten as an open tool — the same one listed below."
+      result: "The first version ran in production from 2022. In 2026 it was rewritten as an open tool - the same one listed below."
 
 # ---------------------------------------------------------------------------
 # Open source. `repo` is the only required field.
@@ -138,7 +138,7 @@ client:
 #   repo         owner/name
 #   npm          package name, if it should link to npmjs.com
 #   title        overrides the repo name
-#   description  overrides GitHub's description (one language — GitHub's own)
+#   description  overrides GitHub's description (one language - GitHub's own)
 #   site         a live demo or docs url
 # ---------------------------------------------------------------------------
 opensource_repos:

@@ -190,10 +190,11 @@ const STRINGS = {
     navAbout: "О студии",
     navContact: "Контакт",
     workHeading: "Под заказ",
-    workNote: "Коммерческие проекты. Имена и скриншоты — только с согласия заказчика, иначе кейс обезличен.",
+    workNote: "Коммерческие проекты. Имена и скриншоты - только с согласия заказчика, иначе кейс обезличен.",
     sourceHeading: "Open-source",
     sourceNote: "Публичные репозитории. Звёзды, язык и описание подтягиваются с GitHub при каждой сборке.",
     aboutHeading: "О студии",
+    stackLabel: "Стек",
     resultLabel: "Что сделано",
     starsLabel: "звёзд на GitHub",
     updatedLabel: "обновлено",
@@ -215,6 +216,7 @@ const STRINGS = {
     sourceHeading: "Open source",
     sourceNote: "Public repositories. Stars, language and description are read from GitHub on every build.",
     aboutHeading: "Studio",
+    stackLabel: "Stack",
     resultLabel: "Outcome",
     starsLabel: "stars on GitHub",
     updatedLabel: "updated",
@@ -227,54 +229,49 @@ const STRINGS = {
   },
 };
 
-function cardClient(item, t) {
+function rowClient(item, t, num) {
   const copy = item[t.htmlLang];
-  const tags = (item.tags || []).map((tag) => `<li>${esc(tag)}</li>`).join("");
-  const client = item.client ? `<span class="client">${esc(item.client)}</span>` : "";
-  const image = item.image
-    ? `<img src="./assets/${esc(item.image)}" alt="${esc(item.title)}" loading="lazy" decoding="async">`
-    : "";
-  const link = item.url
-    ? `<p class="links"><a href="${esc(item.url)}">${esc(item.url.replace(/^https?:\/\//, ""))}</a></p>`
-    : "";
+  const tags = (item.tags || []).map(esc).join(" · ");
+  const client = item.client ? `<span class="client"> — ${esc(item.client)}</span>` : "";
+  const link = item.url ? `<a href="${esc(item.url)}">${esc(item.url.replace(/^https?:\/\//, ""))}</a>` : "";
   return `
-    <article class="card" id="${esc(item.id)}">
-      ${image}
-      <header class="card-head">
-        <span class="status status-${esc(item.status || "shipped")}">${esc(t.status[item.status] || "")}</span>
-        <span class="year">${esc(item.year || "")}</span>
-      </header>
-      <h3>${esc(item.title)}${client}</h3>
-      <p>${esc(copy.summary)}</p>
-      ${copy.result ? `<p class="result"><span>${esc(t.resultLabel)}</span>${esc(copy.result)}</p>` : ""}
-      <ul class="tags">${tags}</ul>
-      ${link}
-    </article>`;
+      <li class="row" id="${esc(item.id)}">
+        <span class="row-num" aria-hidden="true">${String(num).padStart(2, "0")}</span>
+        <div class="row-main">
+          <h3>${esc(item.title)}${client}</h3>
+          <p class="summary">${esc(copy.summary)}</p>
+          ${copy.result ? `<p class="result"><span>${esc(t.resultLabel)}</span>${esc(copy.result)}</p>` : ""}
+          ${tags ? `<p class="tags">${tags}</p>` : ""}
+        </div>
+        <div class="row-meta">
+          <span class="status status-${esc(item.status || "shipped")}">${esc(t.status[item.status] || "")}</span>
+          <span class="year">${esc(item.year || "")}</span>
+          ${link}
+        </div>
+      </li>`;
 }
 
-function cardRepo(item, t) {
-  const stars =
-    item.stars > 0
-      ? `<span class="stars" title="${esc(t.starsLabel)}"><span aria-hidden="true">★</span> ${item.stars}<span class="sr">${esc(t.starsLabel)}</span></span>`
-      : "";
+function rowRepo(item, t, num) {
   const meta = [item.language, item.license, item.pushed ? `${t.updatedLabel} ${item.pushed}` : ""]
     .filter(Boolean)
     .map((bit) => `<span>${esc(bit)}</span>`)
     .join("");
-  const npm = item.npm
-    ? `<a href="${esc(item.npm.url)}">${esc(t.npmLabel)}${item.npm.version ? " " + esc(item.npm.version) : ""}</a>`
-    : "";
+  const stars =
+    item.stars > 0
+      ? `<span class="stars"><span aria-hidden="true">★</span> ${item.stars}<span class="sr">${esc(t.starsLabel)}</span></span>`
+      : "";
+  const npm = item.npm ? `<a href="${esc(item.npm.url)}">${esc(t.npmLabel)}${item.npm.version ? " " + esc(item.npm.version) : ""}</a>` : "";
   const demo = item.site ? `<a href="${esc(item.site)}">${esc(t.demoLabel)}</a>` : "";
   return `
-    <article class="card">
-      <header class="card-head">
-        ${stars}
-        <span class="repo-meta">${meta}</span>
-      </header>
-      <h3><a href="${esc(item.url)}">${esc(item.title)}</a></h3>
-      <p>${esc(item.description)}</p>
-      <p class="links"><a href="${esc(item.url)}">${esc(t.codeLabel)}</a>${npm}${demo}</p>
-    </article>`;
+      <li class="row">
+        <span class="row-num" aria-hidden="true">${String(num).padStart(2, "0")}</span>
+        <div class="row-main">
+          <h3><a href="${esc(item.url)}">${esc(item.title)}</a></h3>
+          <p class="summary">${esc(item.description)}</p>
+          <p class="row-links"><a href="${esc(item.url)}">${esc(t.codeLabel)}</a>${npm}${demo}</p>
+        </div>
+        <div class="row-meta">${stars}${meta}</div>
+      </li>`;
 }
 
 function page(site, repos, lang) {
@@ -282,8 +279,8 @@ function page(site, repos, lang) {
   const hero = site.hero[lang];
   const about = site.about[lang];
   const contact = site.contact[lang];
-  const clients = (site.client || []).map((item) => cardClient(item, t)).join("\n");
-  const source = repos.map((item) => cardRepo(item, t)).join("\n");
+  const clients = (site.client || []).map((item, i) => rowClient(item, t, i + 1)).join("\n");
+  const source = repos.map((item, i) => rowRepo(item, t, i + 1)).join("\n");
   const stack = (site.stack || []).map((s) => `<li>${esc(s)}</li>`).join("");
   const links = (site.contact.links || [])
     .map((l) => `<li><a href="${esc(l.href)}">${esc(l.label)}</a></li>`)
@@ -295,7 +292,7 @@ function page(site, repos, lang) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
-  <title>${esc(site.meta.brand)} — ${esc(hero.kicker)}</title>
+  <title>${esc(site.meta.brand)} - ${esc(hero.kicker)}</title>
   <meta name="description" content="${esc(hero.lead)}">
   <link rel="canonical" href="${esc(site.meta.url)}">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
@@ -331,7 +328,7 @@ function page(site, repos, lang) {
         <h2>${esc(t.workHeading)}</h2>
         <p>${esc(t.workNote)}</p>
       </div>
-      <div class="grid">${clients}</div>
+      <ol class="rows">${clients}</ol>
     </section>
 
     <section id="source">
@@ -339,20 +336,23 @@ function page(site, repos, lang) {
         <h2>${esc(t.sourceHeading)}</h2>
         <p>${esc(t.sourceNote)}</p>
       </div>
-      <div class="grid">${source}</div>
+      <ol class="rows">${source}</ol>
     </section>
 
-    <section id="about" class="split">
-      <div>
-        <h2>${esc(about.heading)}</h2>
+    <section id="about">
+      <h2>${esc(about.heading)}</h2>
+      <div class="about">
         <p>${esc(about.body)}</p>
+        <div class="stack-box">
+          <span class="stack-label">${esc(t.stackLabel)}</span>
+          <ul class="stack">${stack}</ul>
+        </div>
       </div>
-      <ul class="stack">${stack}</ul>
     </section>
 
     <section id="contact">
       <h2>${esc(contact.heading)}</h2>
-      <p>${esc(contact.note)}</p>
+      <p class="contact-note">${esc(contact.note)}</p>
       <ul class="contact">${links}</ul>
     </section>
   </main>
